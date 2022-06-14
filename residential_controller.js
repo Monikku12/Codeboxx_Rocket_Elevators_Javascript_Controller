@@ -209,7 +209,7 @@ class Door {
 module.exports = { Column, Elevator, CallButton, FloorRequestButton, Door }
 
 var testColumn = new Column(1, "online", 10, 2);
-var testDoor = new Door(1, );
+var testDoor = new Door(1);
 var testFloorRequestButton = new FloorRequestButton(1, _status, 7);
 var testCallButton = new CallButton(1, _status, _floor, _direction);
 // var testElevator1 = new Elevator(1, _status, 10, 2);
