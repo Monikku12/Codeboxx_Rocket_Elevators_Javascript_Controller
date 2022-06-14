@@ -36,7 +36,7 @@ const moveAllElevators = (column) => {
 }
 
 describe('ResidentialController', () => {
-    let column = new Column(1, 10, 2)
+    let column = new Column(1, idle, 10, 2)
 
     describe("Column's attributes and methods", () => {
 
