@@ -178,6 +178,7 @@ DEFINE Elevator USING _id AND _status AND _amountOfFloors AND _currentFloor
 
 ENDDEFINE '//Elevator
 
+'// DONE*********'
 DEFINE CallButton USING _id, _status, _floor, _direction
     SET THIS ID TO _id
     SET THIS status TO _status
@@ -185,12 +186,14 @@ DEFINE CallButton USING _id, _status, _floor, _direction
     SET THIS direction TO _direction
 ENDDEFINE
 
+'// DONE*********'
 DEFINE FloorRequestButton USING _id, _status, _floor
     SET THIS ID TO _id
     SET THIS status TO _status
     SET THIS floor TO _floor
 ENDDEFINE
 
+'// DONE*********
 DEFINE Door USING _id, _status
     SET THIS ID TO _id
     SET THIS status TO _status
