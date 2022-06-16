@@ -7,6 +7,7 @@ class Column {
     constructor(_id, _amountOfFloors, _amountOfElevators) {
         this.ID = 1
         this.status = "online"
+        this.amountOfFloors = _amountOfFloors
         this.elevatorList = []
         this.callButtonList = []
         this.requestList = []
@@ -36,7 +37,7 @@ class Column {
 
     createElevators(_amountOfFloors, _amountOfElevators) {
         for (let i = 0; i < _amountOfElevators; i++) {
-            var elevator = new Elevator(elevatorID, "idle", _amountOfFloors, 1); //id, status, amountOfFloors, currentFloor
+            var elevator = new Elevator(elevatorID, _amountOfFloors, 1); //id, status, amountOfFloors, currentFloor
             this.elevatorList.push(elevator);
             elevatorID++;
         }
@@ -45,9 +46,10 @@ class Column {
     //Simulate when a user press a button outside the elevator
     requestElevator(floor, direction) {        
         let elevator = this.findElevator(floor, direction);
+        console.log("elevator", elevator)
         this.requestList.push(floor);
-        this.move;
-        this.operateDoors;
+        elevator.move();
+        elevator.operateDoors();
             return elevator;
         }
 
@@ -103,6 +105,7 @@ class Elevator {
         this.ID = _id
         this.status = "idle"
         this.currentFloor = 1
+        this.amountOfFloors = _amountOfFloors
         this.direction = null
         this.door = new Door(_id, "closed")
         this.floorRequestButtonList = []
@@ -185,7 +188,7 @@ class Elevator {
 class CallButton {
     constructor(_id, _floor, _direction) {
         this.ID = _id
-        this.status != null
+        this.status = "OFF"
         this.floor = _floor
         this.direction = _direction
     }
@@ -194,7 +197,7 @@ class CallButton {
 class FloorRequestButton {
     constructor(_id, _floor) {
         this.ID = _id
-        this.status != null
+        this.status = "OFF"
         this.floor = _floor
     }
 }
@@ -202,15 +205,15 @@ class FloorRequestButton {
 class Door {
     constructor(_id) {
         this.ID = _id
-        this.status != null
+        this.status = ""
     }
 }
 
 module.exports = { Column, Elevator, CallButton, FloorRequestButton, Door }
 
-// var testColumn = new Column(1, 10, 2);
+var testColumn = new Column(1, 10, 2);
 // var testDoor = new Door(1);
-// var testFloorRequestButton = new FloorRequestButton(1, 7);
-// var testCallButton = new CallButton(1, 1, "up");
+var testFloorRequestButton = new FloorRequestButton(1, 7);
+var testCallButton = new CallButton(1, 1, "up");
 // var testElevator = new Elevator(1, 10);
-// testElevator.requestFloor(4)
+// elevator.requestFloor(4)
