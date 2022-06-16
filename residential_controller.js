@@ -1,5 +1,5 @@
 const { identity, floor, isEmpty, slice, over } = require("lodash")
-let elevatorID = 1;
+//let elevatorID = 1;
 let floorRequestButtonID = 1;
 let callButtonID = 1;  
 
@@ -10,13 +10,13 @@ class Column {
         this.amountOfFloors = _amountOfFloors
         this.elevatorList = []
         this.callButtonList = []
-        this.requestList = []
         this.createElevators(_amountOfFloors, _amountOfElevators)
         this.createCallButtons(_amountOfFloors)
     };
     
     //---------------------------------Methods--------------------------------------------//
     createCallButtons(_amountOfFloors) {
+        console.log("Create Call Button")
         var buttonFloor = 1;
         
         for (let i = 0; i < _amountOfFloors; i++) {
@@ -36,27 +36,29 @@ class Column {
     }
 
     createElevators(_amountOfFloors, _amountOfElevators) {
+    console.log("Create Elevator")
         for (let i = 0; i < _amountOfElevators; i++) {
-            var elevator = new Elevator(elevatorID, _amountOfFloors, 1); //id, status, amountOfFloors, currentFloor
+            var elevator = new Elevator(i+1, _amountOfFloors, 1); //id, status, amountOfFloors, currentFloor
             this.elevatorList.push(elevator);
-            elevatorID++;
         }
     }
 
     //Simulate when a user press a button outside the elevator
-    requestElevator(floor, direction) {        
+    requestElevator(floor, direction) {
+    console.log("Request Elevator")        
         let elevator = this.findElevator(floor, direction);
-        console.log("elevator", elevator)
-        this.requestList.push(floor);
+        elevator.floorRequestList.push(floor);
         elevator.move();
         elevator.operateDoors();
             return elevator;
+        
         }
 
     //We use a score system depending on the current elevators state. Since the bestScore and the referenceGap are
     //higher values than what could be possibly calculated, the first elevator will always become the default bestElevator,
     //before being compared with to other elevators. If two elevators get the same score, the nearest one is prioritized.
     findElevator(requestedFloor, requestedDirection) {
+    console.log("find elevator")
         let bestElevator;
         let bestScore = 5
         let referenceGap = 10000000;
@@ -64,7 +66,7 @@ class Column {
         
         this.elevatorList.forEach(elevator => {
         //The elevator is at my floor and going in the direction I want
-        if (requestedFloor = elevator.currentFloor && elevator.status == "stopped" && requestedDirection == elevator.direction) {
+        if (requestedFloor == elevator.currentFloor && elevator.status == "stopped" && requestedDirection == elevator.direction) {
             bestElevatorInformations = this.checkIfElevatorIsBetter(1, elevator, bestElevatorInformations, requestedFloor);
         //The elevator is lower than me, is coming up and I want to go up
         } else if (requestedFloor > elevator.currentFloor && elevator.direction == "up" && requestedDirection == elevator.direction) {
@@ -73,22 +75,24 @@ class Column {
         } else if (requestedFloor < elevator.currentFloor && elevator.direction == "down" && requestedDirection == elevator.direction) {
             bestElevatorInformations = this.checkIfElevatorIsBetter(2, elevator, bestElevatorInformations, requestedFloor);
             //The elevator is idle
-        } else if (elevator.status = "idle") {
+        } else if (elevator.status == "idle") {
             bestElevatorInformations = this.checkIfElevatorIsBetter(3, elevator, bestElevatorInformations, requestedFloor);
             //The elevator is not available, but still could take the call if nothing better is found
         } else {
             bestElevatorInformations = this.checkIfElevatorIsBetter(4, elevator, bestElevatorInformations, requestedFloor);
         }
+        console.log("Best elevator", bestElevatorInformations.bestElevator)
         });
         return bestElevatorInformations.bestElevator;
     }
 
     checkIfElevatorIsBetter(scoreToCheck, newElevator, bestElevatorInformations, floor) {
+    console.log("Check if elevator is better")
         if (scoreToCheck < bestElevatorInformations.bestScore) {
             bestElevatorInformations.bestScore = scoreToCheck;
             bestElevatorInformations.bestElevator = newElevator;
             bestElevatorInformations.referenceGap = Math.abs(newElevator.currentFloor - floor);
-        } else if (bestElevatorInformations.bestScore = scoreToCheck) {
+        } else if (bestElevatorInformations.bestScore == scoreToCheck) {
             let gap = Math.abs(newElevator.currentFloor - floor);
             if (bestElevatorInformations.referenceGap > gap) {
                 bestElevatorInformations.bestElevator = newElevator;
@@ -114,6 +118,7 @@ class Elevator {
     }
 
     createFloorRequestButtons(_amountOfFloors) {
+        console.log("create Floor Request Buttons")
         var buttonFloor = 1
         for (let i = 0; i < _amountOfFloors; i++) {
             var floorRequestButton = new FloorRequestButton(floorRequestButtonID, buttonFloor);
@@ -125,12 +130,14 @@ class Elevator {
 
     //Simulate when a user press a button inside the elevator
     requestFloor(floor) {
+        console.log("Request Floor")
         this.floorRequestList.push(floor);
         this.move();
         this.operateDoors();
         }
 
     move() {
+        console.log("Move")
         while (this.floorRequestList.length !== 0) {
             var destination = this.floorRequestList[0];
             this.status = "moving";
@@ -157,6 +164,7 @@ class Elevator {
 
 
     sortFloorList() {
+        console.log("Sort Floor list")
         if (this.direction = "up") {
             this.floorRequestList.sort;
         } else{
@@ -165,6 +173,7 @@ class Elevator {
     }
 
     operateDoors() {
+        console.log("operate Doors")
         this.door.status = "opened";
         console.log("Wait 5 secondes.");
         let obstruction;
@@ -205,15 +214,49 @@ class FloorRequestButton {
 class Door {
     constructor(_id) {
         this.ID = _id
-        this.status = ""
+        this.status = "closed"
     }
 }
 
 module.exports = { Column, Elevator, CallButton, FloorRequestButton, Door }
 
+// Scenario 1
+// var testColumn = new Column(1, 10, 2);
+// testColumn.elevatorList[0].currentFloor = 2;
+// testColumn.elevatorList[1].currentFloor = 6;
+
+// var elevator = testColumn.requestElevator(3, "up");
+// elevator.requestFloor(7);
+
+// ******************
+
+// scenario 2
+// var testColumn = new Column(1, 10, 2);
+// testColumn.elevatorList[0].currentFloor = 10;
+// testColumn.elevatorList[1].currentFloor = 3;
+
+// var elevator = testColumn.requestElevator(1, "up");
+// elevator.requestFloor(6);
+
+
+
+// ******************
+
+// scenario 3
 var testColumn = new Column(1, 10, 2);
+testColumn.elevatorList[0].currentFloor = 10;
+testColumn.elevatorList[1].currentFloor = 3;
+testColumn.elevatorList[1].status = "moving";
+testColumn.elevatorList[1].floorRequestList.push(6);
+
+var elevator = testColumn.requestElevator(3, "Down");
+elevator.requestFloor(2);
+
+//  ******************
+
+// TEST
 // var testDoor = new Door(1);
-var testFloorRequestButton = new FloorRequestButton(1, 7);
-var testCallButton = new CallButton(1, 1, "up");
+// var testFloorRequestButton = new FloorRequestButton(1, 7);
+// var testCallButton = new CallButton(1, 1, "up");
 // var testElevator = new Elevator(1, 10);
 // elevator.requestFloor(4)
