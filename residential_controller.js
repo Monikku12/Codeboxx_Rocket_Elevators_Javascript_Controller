@@ -16,7 +16,6 @@ class Column {
     
     //---------------------------------Methods--------------------------------------------//
     createCallButtons(_amountOfFloors) {
-        console.log("Create Call Button")
         var buttonFloor = 1;
         
         for (let i = 0; i < _amountOfFloors; i++) {
@@ -36,7 +35,6 @@ class Column {
     }
 
     createElevators(_amountOfFloors, _amountOfElevators) {
-    console.log("Create Elevator")
         for (let i = 0; i < _amountOfElevators; i++) {
             var elevator = new Elevator(i+1, _amountOfFloors, 1); //id, status, amountOfFloors, currentFloor
             this.elevatorList.push(elevator);
@@ -44,8 +42,7 @@ class Column {
     }
 
     //Simulate when a user press a button outside the elevator
-    requestElevator(floor, direction) {
-    console.log("Request Elevator")        
+    requestElevator(floor, direction) {  
         let elevator = this.findElevator(floor, direction);
         elevator.floorRequestList.push(floor);
         elevator.move();
@@ -58,7 +55,6 @@ class Column {
     //higher values than what could be possibly calculated, the first elevator will always become the default bestElevator,
     //before being compared with to other elevators. If two elevators get the same score, the nearest one is prioritized.
     findElevator(requestedFloor, requestedDirection) {
-    console.log("find elevator")
         let bestElevator;
         let bestScore = 5
         let referenceGap = 10000000;
@@ -81,13 +77,11 @@ class Column {
         } else {
             bestElevatorInformations = this.checkIfElevatorIsBetter(4, elevator, bestElevatorInformations, requestedFloor);
         }
-        console.log("Best elevator", bestElevatorInformations.bestElevator)
         });
         return bestElevatorInformations.bestElevator;
     }
 
     checkIfElevatorIsBetter(scoreToCheck, newElevator, bestElevatorInformations, floor) {
-    console.log("Check if elevator is better")
         if (scoreToCheck < bestElevatorInformations.bestScore) {
             bestElevatorInformations.bestScore = scoreToCheck;
             bestElevatorInformations.bestElevator = newElevator;
@@ -118,7 +112,6 @@ class Elevator {
     }
 
     createFloorRequestButtons(_amountOfFloors) {
-        console.log("create Floor Request Buttons")
         var buttonFloor = 1
         for (let i = 0; i < _amountOfFloors; i++) {
             var floorRequestButton = new FloorRequestButton(floorRequestButtonID, buttonFloor);
@@ -130,14 +123,12 @@ class Elevator {
 
     //Simulate when a user press a button inside the elevator
     requestFloor(floor) {
-        console.log("Request Floor")
         this.floorRequestList.push(floor);
         this.move();
         this.operateDoors();
         }
 
     move() {
-        console.log("Move")
         while (this.floorRequestList.length !== 0) {
             var destination = this.floorRequestList[0];
             this.status = "moving";
@@ -164,7 +155,6 @@ class Elevator {
 
 
     sortFloorList() {
-        console.log("Sort Floor list")
         if (this.direction = "up") {
             this.floorRequestList.sort;
         } else{
@@ -173,9 +163,7 @@ class Elevator {
     }
 
     operateDoors() {
-        console.log("operate Doors")
         this.door.status = "opened";
-        console.log("Wait 5 secondes.");
         let obstruction;
         if (this !== "overweight") {
             this.door.status = "closing";
@@ -186,7 +174,6 @@ class Elevator {
             }
         } else {
             while (this.isOverweight) {
-            console.log("Activate overweight alarm");
             }
             this.operateDoors;
         }
@@ -220,43 +207,17 @@ class Door {
 
 module.exports = { Column, Elevator, CallButton, FloorRequestButton, Door }
 
-// Scenario 1
-// var testColumn = new Column(1, 10, 2);
-// testColumn.elevatorList[0].currentFloor = 2;
-// testColumn.elevatorList[1].currentFloor = 6;
-
-// var elevator = testColumn.requestElevator(3, "up");
-// elevator.requestFloor(7);
-
-// ******************
-
-// scenario 2
-// var testColumn = new Column(1, 10, 2);
-// testColumn.elevatorList[0].currentFloor = 10;
-// testColumn.elevatorList[1].currentFloor = 3;
-
-// var elevator = testColumn.requestElevator(1, "up");
-// elevator.requestFloor(6);
-
 
 
 // ******************
 
-// scenario 3
-var testColumn = new Column(1, 10, 2);
-testColumn.elevatorList[0].currentFloor = 10;
-testColumn.elevatorList[1].currentFloor = 3;
-testColumn.elevatorList[1].status = "moving";
-testColumn.elevatorList[1].floorRequestList.push(6);
+// To run your own simulation, uncomment the TEMPLATE section below and enter your own value in the different fields. 
 
-var elevator = testColumn.requestElevator(3, "Down");
-elevator.requestFloor(2);
+// TEMPLATE
+// var templateColumn = new Column(1, 10, 2);
+// templateColumn.elevatorList[0].currentFloor = yourFirstElevatorCurrentFloor;
+// templateColumn.elevatorList[1].currentFloor = yourSecondElevatorCurrentFloor;
+// var elevator = templateColumn.requestElevator(yourCurrentFloor, "yourRequestedDirection");
+// elevator.requestFloor(<yourRequestedFloorNumber>);
 
 //  ******************
-
-// TEST
-// var testDoor = new Door(1);
-// var testFloorRequestButton = new FloorRequestButton(1, 7);
-// var testCallButton = new CallButton(1, 1, "up");
-// var testElevator = new Elevator(1, 10);
-// elevator.requestFloor(4)
