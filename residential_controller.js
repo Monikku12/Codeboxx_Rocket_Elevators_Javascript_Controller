@@ -214,10 +214,10 @@ module.exports = { Column, Elevator, CallButton, FloorRequestButton, Door }
 // To run your own simulation, uncomment the TEMPLATE section below and enter your own value in the different fields. 
 
 // TEMPLATE - empty
-// templateColumn = Column(1, <numberOfFloors>, <numberOfElevators>)
-// templateColumn.elevatorList[0].currentFloor = <yourFirstElevatorCurrentFloor>
-// templateColumn.elevatorList[1].currentFloor = <yourSecondElevatorCurrentFloor>
-// elevator = templateColumn.requestElevator(<yourCurrentFloor>, "<yourRequestedDirection>")
-// elevator.requestFloor(<yourRequestedFloorNumber>)
+// var templateColumn = new Column(1, <numberOfFloors>, <numberOfElevators>);
+// templateColumn.elevatorList[0].currentFloor = <yourFirstElevatorCurrentFloor>;
+// templateColumn.elevatorList[1].currentFloor = <yourSecondElevatorCurrentFloor>;
+// var elevator = templateColumn.requestElevator(<yourCurrentFloor>, "<yourRequestedDirection>");
+// elevator.requestFloor(<yourRequestedFloorNumber>);
 
 //  ******************
